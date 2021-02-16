@@ -2,3 +2,7 @@ this is test file
 Add new line
 
 add 3rd line
+
+
+this project is very useful for everyone
+it is more and more info

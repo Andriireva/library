@@ -8,15 +8,42 @@ public class Library {
   private String name;
   private Instant foundDate;
   private Integer booksCount;
+  private Boolean free;
+  private Boolean longPeriod;
 
   Library() {
 
+  }
+
+  public Library(Long id, String name, Instant foundDate, Integer booksCount, Boolean free, Boolean longPeriod) {
+    this.id = id;
+    this.name = name;
+    this.foundDate = foundDate;
+    this.booksCount = booksCount;
+    this.free = free;
+    this.longPeriod = longPeriod;
   }
 
   public Library(String name, Instant foundDate, Integer booksCount) {
     this.name = name;
     this.foundDate = foundDate;
     this.booksCount = booksCount;
+  }
+
+  public Boolean getFree() {
+    return free;
+  }
+
+  public void setFree(Boolean free) {
+    this.free = free;
+  }
+
+  public Boolean getLongPeriod() {
+    return longPeriod;
+  }
+
+  public void setLongPeriod(Boolean longPeriod) {
+    this.longPeriod = longPeriod;
   }
 
   public Long getId() {
@@ -57,11 +84,23 @@ public class Library {
     if (o == null || getClass() != o.getClass())
       return false;
     Library library = (Library) o;
-    return Objects.equals(name, library.name) && Objects.equals(foundDate, library.foundDate) && Objects
-          .equals(booksCount, library.booksCount);
+    return Objects.equals(id, library.id) && Objects.equals(name, library.name) && Objects
+          .equals(foundDate, library.foundDate) && Objects.equals(booksCount, library.booksCount) && Objects
+          .equals(free, library.free) && Objects.equals(longPeriod, library.longPeriod);
   }
 
   @Override public int hashCode() {
-    return Objects.hash(name, foundDate, booksCount);
+    return Objects.hash(id, name, foundDate, booksCount, free, longPeriod);
+  }
+
+  @Override public String toString() {
+    return "Library{" +
+          "id=" + id +
+          ", name='" + name + '\'' +
+          ", foundDate=" + foundDate +
+          ", booksCount=" + booksCount +
+          ", free=" + free +
+          ", longPeriod=" + longPeriod +
+          '}';
   }
 }

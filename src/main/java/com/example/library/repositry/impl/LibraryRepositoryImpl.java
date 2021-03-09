@@ -3,21 +3,16 @@ package com.example.library.repositry.impl;
 import com.example.library.domain.Library;
 import com.example.library.repositry.LibraryRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class LibraryRepositoryImpl implements LibraryRepository {
@@ -34,13 +29,18 @@ public class LibraryRepositoryImpl implements LibraryRepository {
   }
 
   @Override
-  public Library getById(Long id) {
-    return jdbcTemplate.queryForObject("select * from libraries where id = ?",
-          libraryRowMapper, id);
+  public Optional<Library> getById(Long id) {
+    try {
+      Library library = jdbcTemplate.queryForObject("select * from libraries where id = ?",
+            libraryRowMapper, id);
+      return Optional.ofNullable(library);
+    } catch (DataAccessException e) {
+      return Optional.empty();
+    }
   }
 
   @Override
-  public Library create(Library library) {
+  public Optional<Library> create(Library library) {
     GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement =
@@ -59,7 +59,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
   }
 
   @Override
-  public Library update(Library library, Long id) {
+  public Optional<Library> update(Library library, Long id) {
     jdbcTemplate.update("update libraries\n"
                 + " set name = ?, "
                 + "     books_count = ?, "

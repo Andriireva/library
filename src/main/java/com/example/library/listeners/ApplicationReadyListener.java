@@ -2,6 +2,7 @@ package com.example.library.listeners;
 
 import com.example.library.domain.Library;
 import com.example.library.repositry.LibraryRepository;
+import com.example.library.services.LibraryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -16,20 +17,15 @@ public class ApplicationReadyListener {
   private static final Logger LOGGER =
         LoggerFactory.getLogger(ApplicationReadyListener.class);
 
-  private final LibraryRepository libraryRepository;
+  private final LibraryService libraryService;
 
-  public ApplicationReadyListener(LibraryRepository libraryRepository) {
-    this.libraryRepository = libraryRepository;
+  public ApplicationReadyListener(LibraryService libraryService) {
+    this.libraryService = libraryService;
   }
 
 
   @EventListener(ApplicationReadyEvent.class)
   public void applicationReadyHandler() {
-    Library library = libraryRepository.getById(4L).get();
-
-    LOGGER.info("Library = {}", library);
-
-    List<Library> libraries = libraryRepository.getAll();
-    LOGGER.info("Libraries = {}", libraries);
+    libraryService.delete(6L);
   }
 }

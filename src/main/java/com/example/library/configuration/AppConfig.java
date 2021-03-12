@@ -1,5 +1,6 @@
 package com.example.library.configuration;
 
+import com.example.library.domain.Book;
 import com.example.library.domain.Library;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.awt.print.Book;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

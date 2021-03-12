@@ -80,6 +80,6 @@ public class LibraryRepositoryImpl implements LibraryRepository {
 
   @Override
   public void delete(Long id) {
-    jdbcTemplate.update("delete from library where id = ?", id);
+    jdbcTemplate.update("delete from libraries where id = ?", id);
   }
 }

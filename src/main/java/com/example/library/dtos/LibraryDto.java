@@ -2,6 +2,7 @@ package com.example.library.dtos;
 
 import com.example.library.domain.Book;
 import com.example.library.domain.Library;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 public class LibraryDto {
   private Long id;
   private String name;

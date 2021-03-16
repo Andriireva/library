@@ -7,6 +7,7 @@ import java.util.Objects;
 
 @ToString
 @Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor

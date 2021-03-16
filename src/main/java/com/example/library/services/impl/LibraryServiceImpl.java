@@ -12,6 +12,8 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,16 +29,9 @@ public class LibraryServiceImpl implements LibraryService {
   @SneakyThrows
   public LibraryDto getById(Long id) {
 
-//    Library library = Library.builder()
-//          .booksCount(5)
-//          .free(true)
-//          .build();
-
-    bookRepository.doSomething();
-
 
     return libraryRepository.getById(id)
-          .map(library -> new LibraryDto(library, bookRepository.getAllByLibraryId(id)))
+          .map(library -> new LibraryDto(library))
           .orElseThrow(() -> new ResourceNotFoundException("Library with id " + id + " is not found"));
   }
 
@@ -49,7 +44,7 @@ public class LibraryServiceImpl implements LibraryService {
 //            bookRepository.create(libraryDto.
 //                  getBooks().stream().map(bookDto -> BookDto.toDomain(bookDto)).collect(Collectors.toList()), library.getId());
 //          });
-    return new LibraryDto(null);
+    return new LibraryDto(new Library(2L, "second", Instant.now(), null, null, null));
   }
 
   @Override
@@ -60,7 +55,8 @@ public class LibraryServiceImpl implements LibraryService {
 
   @Override
   public List<LibraryDto> getAll() {
-    return null;
+    return Arrays.asList(new LibraryDto(new Library(1L, "asdas", Instant.now(), null, null, null)),
+          new LibraryDto(new Library(2L, "second", Instant.now(), null, null, null)));
   }
 
   @Override

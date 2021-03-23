@@ -9,8 +9,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @AllArgsConstructor
+//@NoArgsConstructor
 @Builder
 public class Library {
   private Long id;

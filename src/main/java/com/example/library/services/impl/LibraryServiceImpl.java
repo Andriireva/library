@@ -1,8 +1,10 @@
 package com.example.library.services.impl;
 
+import com.example.library.domain.Book;
 import com.example.library.domain.Library;
 import com.example.library.dtos.BookDto;
 import com.example.library.dtos.LibraryDto;
+import com.example.library.exceptions.ApplicationException;
 import com.example.library.exceptions.ResourceNotFoundException;
 import com.example.library.repositry.BookRepository;
 import com.example.library.repositry.LibraryRepository;
@@ -27,8 +29,10 @@ public class LibraryServiceImpl implements LibraryService {
 
   @Override
   @SneakyThrows
-  public LibraryDto getById(Long id) {
-
+  public LibraryDto getById( Long id) {
+    if (id < 0) {
+      throw new RuntimeException();
+    }
 
     return libraryRepository.getById(id)
           .map(library -> new LibraryDto(library))
@@ -38,19 +42,24 @@ public class LibraryServiceImpl implements LibraryService {
   @Override
   public LibraryDto create(LibraryDto libraryDto) {
     Library library = LibraryDto.toDomain(libraryDto);
-//    BookDto.toDomain(libraryDto.getBooks().iterator().next())
-//    libraryRepository.create(library)
-//          .map(createdLibrary -> {
-//            bookRepository.create(libraryDto.
-//                  getBooks().stream().map(bookDto -> BookDto.toDomain(bookDto)).collect(Collectors.toList()), library.getId());
-//          });
-    return new LibraryDto(new Library(2L, "second", Instant.now(), null, null, null));
+    Library createdLibrary = libraryRepository.create(library)
+          .orElseThrow(() -> new ApplicationException("Something went wrong when library is not created"));
+    List<Book> createdBooks = null;
+    if (libraryDto.getBooks() != null && !libraryDto.getBooks().isEmpty()) {
+      createdBooks = bookRepository
+            .create(libraryDto.getBooks().stream().map(BookDto::toDomain).collect(Collectors.toList()), createdLibrary.getId());
+    }
+
+    return new LibraryDto(createdLibrary, createdBooks);
   }
 
   @Override
   public void delete(Long id) {
-    bookRepository.deleteAllByLibraryId(id);
-    libraryRepository.delete(id);
+    libraryRepository.getById(id).map(library -> {
+      bookRepository.deleteAllByLibraryId(id);
+      libraryRepository.delete(id);
+      return library;
+    }).orElseThrow(() -> new ResourceNotFoundException("Library with id " + id + " is not found"));
   }
 
   @Override

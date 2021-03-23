@@ -2,6 +2,7 @@ package com.example.library.dtos;
 
 import com.example.library.domain.Book;
 import com.example.library.domain.Library;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
+@EqualsAndHashCode
 public class LibraryDto {
   private Long id;
   private String name;
@@ -37,7 +39,13 @@ public class LibraryDto {
   }
 
   public static Library toDomain(LibraryDto libraryDto) {
-    return null;
+    return Library.builder()
+          .name(libraryDto.getName())
+          .name(libraryDto.getName())
+          .name(libraryDto.getName())
+          .name(libraryDto.getName())
+          .name(libraryDto.getName())
+          .build();
   }
 
   public Long getId() {

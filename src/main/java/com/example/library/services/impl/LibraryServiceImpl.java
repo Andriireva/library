@@ -7,6 +7,7 @@ import com.example.library.dtos.LibraryDto;
 import com.example.library.exceptions.ApplicationException;
 import com.example.library.exceptions.ResourceNotFoundException;
 import com.example.library.repositry.BookRepository;
+import com.example.library.repositry.JpaLibraryRepository;
 import com.example.library.repositry.LibraryRepository;
 import com.example.library.services.LibraryService;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LibraryServiceImpl implements LibraryService {
 
-  private final LibraryRepository libraryRepository;
+  private final JpaLibraryRepository libraryRepository;
   private final BookRepository bookRepository;
 
   @Override
   @SneakyThrows
   public LibraryDto getById( Long id) {
-    if (id < 0) {
-      throw new RuntimeException();
-    }
-
-    return libraryRepository.getById(id)
+    return libraryRepository.findById(id)
           .map(library -> new LibraryDto(library))
           .orElseThrow(() -> new ResourceNotFoundException("Library with id " + id + " is not found"));
   }
@@ -42,8 +39,7 @@ public class LibraryServiceImpl implements LibraryService {
   @Override
   public LibraryDto create(LibraryDto libraryDto) {
     Library library = LibraryDto.toDomain(libraryDto);
-    Library createdLibrary = libraryRepository.create(library)
-          .orElseThrow(() -> new ApplicationException("Something went wrong when library is not created"));
+    Library createdLibrary = libraryRepository.save(library);
     List<Book> createdBooks = null;
     if (libraryDto.getBooks() != null && !libraryDto.getBooks().isEmpty()) {
       createdBooks = bookRepository
@@ -55,9 +51,9 @@ public class LibraryServiceImpl implements LibraryService {
 
   @Override
   public void delete(Long id) {
-    libraryRepository.getById(id).map(library -> {
-      bookRepository.deleteAllByLibraryId(id);
-      libraryRepository.delete(id);
+    libraryRepository.findById(id).map(library -> {
+//      bookRepository.deleteAllByLibraryId(id);
+      libraryRepository.deleteById(id);
       return library;
     }).orElseThrow(() -> new ResourceNotFoundException("Library with id " + id + " is not found"));
   }

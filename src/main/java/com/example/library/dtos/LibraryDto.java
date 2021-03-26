@@ -35,7 +35,7 @@ public class LibraryDto {
   }
 
   public LibraryDto(Library library) {
-    this(library, null);
+    this(library, library.getBooks());
   }
 
   public static Library toDomain(LibraryDto libraryDto) {
